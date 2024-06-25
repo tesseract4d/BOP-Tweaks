@@ -23,6 +23,7 @@ public class BOPTweaks {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent e) {
         BOPTBlocks.init();
+        BOPTBiomes.init();
     }
 
     @Mod.EventHandler

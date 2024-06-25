@@ -1,153 +1,101 @@
 package mods.tesseract.bopt.world;
 
-import net.minecraft.entity.player.EntityPlayerMP;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import mods.tesseract.bopt.BOPTBlocks;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldProvider;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraftforge.client.IRenderHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class WorldProviderPromised extends WorldProvider {
-
-    private float[] colorsSunriseSunset = new float[4];
-
-    public WorldProviderPromised() {
-        super();
-    }
-
-    @Override
-    protected void registerWorldChunkManager() {
+    public void registerWorldChunkManager() {
+        //if (Biomes.promisedLandForest.isPresent() || Biomes.promisedLandPlains.isPresent() || Biomes.promisedLandShrub.isPresent() || Biomes.promisedLandSwamp.isPresent())
         this.worldChunkMgr = new WorldChunkManagerPromised(this.worldObj);
+        this.hasNoSky = false;
+        this.dimensionId = 20;
     }
 
-    @Override
-    public float calculateCelestialAngle(long worldTime, float partialTicks)
-    {
-        return 1;
+    public String getDimensionName() {
+        return "Promised Land";
     }
 
-    @Override
-    public float[] calcSunriseSunsetColors(float f, float f1) {
-        float f2 = 0.4F;
-        float f3 = MathHelper.cos(f * 3.141593F * 2.0F) - 0.0F;
-        float f4 = -0F;
-
-        if (f3 >= f4 - f2 && f3 <= f4 + f2) {
-            float f5 = (f3 - f4) / f2 * 0.5F + 0.5F;
-            float f6 = 1.0F - (1.0F - MathHelper.sin(f5 * 3.141593F)) * 0.99F;
-            f6 *= f6;
-            this.colorsSunriseSunset[0] = f5 * 0.3F + 0.1F;
-            this.colorsSunriseSunset[1] = f5 * f5 * 0.7F + 0.2F;
-            this.colorsSunriseSunset[2] = f5 * f5 * 0.7F + 0.2F;
-            this.colorsSunriseSunset[3] = f6;
-            return this.colorsSunriseSunset;
-        } else {
-            return null;
-        }
-    }
-
-    @Override
-    public int getRespawnDimension(EntityPlayerMP player)
-    {
-        return  0;
-    }
-
-    @Override
-    public boolean canCoordinateBeSpawn(int i, int j) {
-        return false;
-    }
-
-    @Override
     public boolean canRespawnHere() {
         return false;
     }
 
-    @Override
-    public IChunkProvider createChunkGenerator() {
-        return new ChunkProviderPromised(this.worldObj, this.worldObj.getSeed());
+    public double getMovementFactor() {
+        return 16.0D;
     }
 
-    public boolean canDoLightning(Chunk chunk) {
-        return false;
+    public float calculateCelestialAngle(long par1, float par3) {
+        return 1.0F;
     }
 
-    public boolean canDoRainSnowIce(Chunk chunk) {
-        return false;
-    }
-
-    @Override
-    public Vec3 getFogColor(float f, float f1) {
-        int i = 0x9393BC;
-
-        float f2 = MathHelper.cos(f * 3.141593F * 2.0F) * 2.0F + 0.5F;
-        if (f2 < 0.0F) {
-            f2 = 0.0F;
-        }
-        if (f2 > 1.0F) {
-            f2 = 1.0F;
-        }
-        float f3 = (i >> 16 & 0xff) / 255F;
-        float f4 = (i >> 8 & 0xff) / 255F;
-        float f5 = (i & 0xff) / 255F;
-        f3 *= f2 * 0.94F + 0.06F;
-        f4 *= f2 * 0.94F + 0.06F;
-        f5 *= f2 * 0.91F + 0.09F;
-
-        return Vec3.createVectorHelper(f3, f4, f5);
-    }
-
-    @Override
-    public String getSaveFolder() {
-        return "Dim-Aether";
-    }
-
-    @Override
-    public double getVoidFogYFactor() {
-        return 100;
-    }
-
-    @Override
-    public boolean doesXZShowFog(int x, int z) {
-        return false;
-    }
-
-    @Override
-    public boolean isSkyColored() {
-        return false;
-    }
-
-    @Override
-    public double getHorizon() {
-        return 0.0;
-    }
-
-    @Override
     public float getCloudHeight() {
-        return -5F;
+        return 0.0F;
     }
 
-    @Override
-    public String getDimensionName() {
-        return "the_aether";
+    public boolean canCoordinateBeSpawn(int par1, int par2) {
+        return this.worldObj.getTopBlock(par1, par2) == BOPTBlocks.holyGrass;
     }
 
-    @Override
+    public ChunkCoordinates getEntrancePortalLocation() {
+        return new ChunkCoordinates(100, 50, 0);
+    }
+
+    public int getAverageGroundLevel() {
+        return 64;
+    }
+
+    public double getHorizon() {
+        return 0.0D;
+    }
+
     @SideOnly(Side.CLIENT)
     public boolean getWorldHasVoidParticles() {
         return false;
     }
 
-    @Override
     @SideOnly(Side.CLIENT)
-    public net.minecraftforge.client.IRenderHandler getWeatherRenderer() {
-        return new IRenderHandler() {
-            @Override
-            public void render(float partialTicks, net.minecraft.client.multiplayer.WorldClient world, net.minecraft.client.Minecraft mc) {
+    public boolean isSkyColored() {
+        return true;
+    }
 
-            }
-        };
+    public double getVoidFogYFactor() {
+        return 1.0D;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public Vec3 getFogColor(float par1, float par2) {
+        float var3 = MathHelper.cos(par1 * 3.1415927F * 2.0F) * 2.0F + 0.5F;
+        if (var3 < 0.0F)
+            var3 = 0.0F;
+        if (var3 > 1.0F)
+            var3 = 1.0F;
+        float var4 = 1.0F;
+        float var5 = 0.7372549F;
+        float var6 = 0.25882354F;
+        var4 *= var3 * 3.94F + 0.06F;
+        var5 *= var3 * 0.94F + 0.06F;
+        var6 *= var3 * 0.91F + 0.09F;
+        return Vec3.createVectorHelper(var4, var5, var6);
+    }
+
+    public void setAllowedSpawnTypes(boolean allowHostile, boolean allowPeaceful) {
+        allowPeaceful = true;
+    }
+
+    public String getWelcomeMessage() {
+        return "Entering the Promised Land";
+    }
+
+    public String getDepartMessage() {
+        return "Leaving the Promised Land";
+    }
+
+    public IChunkProvider createChunkGenerator() {
+        return new ChunkProviderPromised(this.worldObj, this.worldObj.getSeed());
     }
 }

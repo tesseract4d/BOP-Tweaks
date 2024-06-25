@@ -1,6 +1,7 @@
 package mods.tesseract.bopt.world.layer;
 
 import biomesoplenty.common.world.layer.hell.BiomeLayerHell;
+import mods.tesseract.bopt.BOPTBiomes;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.layer.IntCache;
@@ -16,7 +17,7 @@ public class BiomeLayerPromisedBiomes extends BiomeLayerPromised {
     public BiomeLayerPromisedBiomes(long par1, BiomeLayerHell par3GenLayer) {
         super(par1);
         this.parent = par3GenLayer;
-        this.promisedBiomes.add(new BiomeManager.BiomeEntry(BiomeGenBase.forest,10));
+        this.promisedBiomes.add(new BiomeManager.BiomeEntry(BOPTBiomes.promisedLandForest,10));
     }
 
     public int[] getInts(int par1, int par2, int par3, int par4) {

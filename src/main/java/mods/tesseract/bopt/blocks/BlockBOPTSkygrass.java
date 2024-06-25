@@ -9,10 +9,15 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.EnumPlantType;
+import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.Random;
+
+import static net.minecraftforge.common.util.ForgeDirection.UP;
 
 public class BlockBOPTSkygrass extends Block {
     private IIcon[] icon = new IIcon[6];
@@ -45,6 +50,21 @@ public class BlockBOPTSkygrass extends Block {
         if (world.getBlock(x, y, z) == this && side == ForgeDirection.UP && world.provider.dimensionId == -1)
             return true;
         return super.isFireSource(world, x, y, z, side);
+    }
+
+    public boolean canSustainPlant(IBlockAccess world, int x, int y, int z, ForgeDirection direction, IPlantable plantable) {
+        boolean hasWater;
+        EnumPlantType plantType = plantable.getPlantType(world, x, y + 1, z);
+        switch (plantType) {
+            case Cave:
+                return isSideSolid(world, x, y, z, UP);
+            case Plains:
+                return true;
+            case Beach:
+                hasWater = (world.getBlock(x - 1, y, z).getMaterial() == Material.water || world.getBlock(x + 1, y, z).getMaterial() == Material.water || world.getBlock(x, y, z - 1).getMaterial() == Material.water || world.getBlock(x, y, z + 1).getMaterial() == Material.water);
+                return hasWater;
+        }
+        return super.canSustainPlant(world, x, y, z, direction, plantable);
     }
 
     public void updateTick(World world, int x, int y, int z, Random random) {

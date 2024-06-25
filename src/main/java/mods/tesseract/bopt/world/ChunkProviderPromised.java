@@ -6,7 +6,6 @@ import java.util.Random;
 import mods.tesseract.bopt.BOPTBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.IProgressUpdate;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.SpawnerAnimals;
@@ -61,19 +60,18 @@ public class ChunkProviderPromised implements IChunkProvider {
 
                         for (int i2 = 0; i2 < 8; i2++) {
                             int j2 = i2 + i1 * 8 << 11 | 0 + j1 * 8 << 7 | k1 * 4 + l1;
-                            char c = '\200';
                             double d15 = d10;
                             double d16 = (d11 - d10) * 0.125D;
 
                             for (int k2 = 0; k2 < 8; k2++) {
-                                Block filler = Blocks.air;
+                                Block filler = null;
 
                                 if (d15 > 0.0D) {
                                     filler =  BOPTBlocks.holyStone;
                                 }
 
                                 blocks[j2] = filler;
-                                j2 += c;
+                                j2 += 128;
                                 d15 += d16;
                             }
 
@@ -101,20 +99,20 @@ public class ChunkProviderPromised implements IChunkProvider {
                 int j1 = -1;
                 int i1 = (int) (3.0D + this.rand.nextDouble() * 0.25D);
 
-                Block top = Blocks.grass;
-                Block filler = Blocks.dirt;
+                Block top = BOPTBlocks.holyGrass;
+                Block filler = BOPTBlocks.holyDirt;
 
                 for (int k1 = 127; k1 >= 0; k1--) {
                     int l1 = (l * 16 + k) * 128 + k1;
 
                     Block block = blocks[l1];
 
-                    if (block == Blocks.air) {
+                    if (block == null) {
                         j1 = -1;
                     } else if (block ==  BOPTBlocks.holyStone) {
                         if (j1 == -1) {
                             if (i1 <= 0) {
-                                top = Blocks.air;
+                                top = null;
                                 filler = BOPTBlocks.holyStone;
                             }
 
@@ -141,7 +139,7 @@ public class ChunkProviderPromised implements IChunkProvider {
         }
 
         double d = 1368.824D;
-        double d1 = 684.41200000000003D;
+        double d1 = 684.412;
 
         this.pnr = this.perlinNoise1.generateNoiseOctaves(this.pnr, x, 0, z, 3, 33, 3, d / 80D, d1 / 160D, d / 80D);
         this.ar = this.noiseGen1.generateNoiseOctaves(this.ar, x, 0, z, 3, 33, 3, d, d1, d);
@@ -262,7 +260,7 @@ public class ChunkProviderPromised implements IChunkProvider {
 
     @Override
     public String makeString() {
-        return "AetherRandomLevelSource";
+        return "PromisedRandomLevelSource";
     }
 
     @Override

@@ -24,9 +24,9 @@ public abstract class BiomeLayerPromised extends BiomeLayerHell {
             obj = new BiomeLayerHellZoom(1000L + j, obj);
             j++;
         }
-        BiomeLayerHellVoronoiZoom genlayervoronoizoom = new BiomeLayerHellVoronoiZoom(10L, obj);
+        BiomeLayerHellVoronoiZoom g = new BiomeLayerHellVoronoiZoom(10L, obj);
         obj.initWorldGenSeed(seed);
-        genlayervoronoizoom.initWorldGenSeed(seed);
-        return new GenLayer[] { obj, genlayervoronoizoom };
+        g.initWorldGenSeed(seed);
+        return new GenLayer[] { obj, g };
     }
 }
